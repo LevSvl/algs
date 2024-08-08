@@ -22,3 +22,7 @@ matr: ${ARRAYS}/matr.c
 rem_duplicates: ${LL}/rem_duplicates.c
 	${CC} ${CCFLAGS} ${LL}/rem_duplicates.c -o $(LL)/_rem_duplicates
 	$(LL)/_rem_duplicates
+
+common_elem: ${LL}/common_elem.c
+	${CC} ${CCFLAGS} ${LL}/common_elem.c -o $(LL)/_common_elem
+	$(LL)/_common_elem
