@@ -7,6 +7,7 @@ CCFLAGS = -Wall -g
 ARRAYS = arrays
 HT = hash_tables
 LL = linked_lists
+ST = stack
 
 
 ht: $(HT)/hash_table.cpp
@@ -26,3 +27,7 @@ rem_duplicates: ${LL}/rem_duplicates.c
 common_elem: ${LL}/common_elem.c
 	${CC} ${CCFLAGS} ${LL}/common_elem.c -o $(LL)/_common_elem
 	$(LL)/_common_elem
+
+check_branches: ${ST}/check_branches.c
+	${CC} ${CCFLAGS} ${ST}/check_branches.c -o $(ST)/_check_branches
+	$(ST)/_check_branches
