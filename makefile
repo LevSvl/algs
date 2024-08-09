@@ -8,6 +8,7 @@ ARRAYS = arrays
 HT = hash_tables
 LL = linked_lists
 ST = stack
+SORT = sort
 
 
 ht: $(HT)/hash_table.cpp
@@ -31,3 +32,6 @@ common_elem: ${LL}/common_elem.c
 check_branches: ${ST}/check_branches.c
 	${CC} ${CCFLAGS} ${ST}/check_branches.c -o $(ST)/_check_branches
 	$(ST)/_check_branches
+
+rec_sort: ${SORT}/rec_sort.c
+	${CC} ${CCFLAGS} ${SORT}/rec_sort.c -o $(SORT)/_rec_sort
