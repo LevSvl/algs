@@ -1,7 +1,10 @@
-CP = g++
-CC = gcc
+PREFIX = x86_64-linux-gnu-
+CP = ${PREFIX}g++
+CC = ${PREFIX}gcc
+LD = ${PREFIX}ld
 
 CCFLAGS = -Wall -g
+LDFLAGS =
 
 # folders
 ARRAYS = arrays
@@ -9,6 +12,7 @@ HT = hash_tables
 LL = linked_lists
 ST = stack
 SORT = sort
+SEARCH = search
 
 
 ht: $(HT)/hash_table.cpp
@@ -35,3 +39,6 @@ check_branches: ${ST}/check_branches.c
 
 rec_sort: ${SORT}/rec_sort.c
 	${CC} ${CCFLAGS} ${SORT}/rec_sort.c -o $(SORT)/_rec_sort
+
+bin_search: ${SEARCH}/bin_search.c
+	${CC} ${CCFLAGS} ${SEARCH}/bin_search.c -o $(SEARCH)/_bin_search
