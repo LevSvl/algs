@@ -7,7 +7,6 @@
 struct stack
 {
   char *arr;
-  int indexReadWrite;
   int size;
   int capacity;
 };
