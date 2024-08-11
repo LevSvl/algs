@@ -13,6 +13,7 @@ LL = linked_lists
 ST = stack
 SORT = sort
 SEARCH = search
+TREES = trees
 
 
 ht: $(HT)/hash_table.cpp
@@ -42,3 +43,7 @@ rec_sort: ${SORT}/rec_sort.c
 
 bin_search: ${SEARCH}/bin_search.c
 	${CC} ${CCFLAGS} ${SEARCH}/bin_search.c -o $(SEARCH)/_bin_search
+
+bin_tree: ${TREES}/bin_tree.c
+	${CC} ${CCFLAGS} ${TREES}/bin_tree.c -o ${TREES}/_bin_tree
+	${TREES}/_bin_tree
