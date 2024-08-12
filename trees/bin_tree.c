@@ -8,41 +8,72 @@ typedef struct Node{
   struct Node *right;
 } node_t;
 
-typedef struct Tree{
-  node_t* root;
-  size_t level;
-} tree_t;
-
-node_t* add(node_t *root, int dstData);
+node_t* createNode(int dstData);
+void push(node_t **tree, int dstData);
+void peek(node_t *rootNode);
 
 int main(int argc, char const *argv[])
 {
-  tree_t *tree = (tree_t*)malloc(sizeof(tree_t));
-  
-  tree->root = add(tree->root, 6);
+  node_t* tree = NULL;
 
-  printf("%d\n",tree->root->data);
+  push(&tree, 10);
+  push(&tree, 12);
+  push(&tree, 112);
+  push(&tree, -2);
+  push(&tree, 1);
+  push(&tree, 10000);
+
+  peek(tree);
+
+  printf("\n");
 
   return 0;
 }
 
-node_t* add(node_t *root, int dstData)
+node_t* createNode(int dstData)
 {
-  if(!root){
-    root = (node_t*)malloc(sizeof(node_t));
-    root->data = dstData;
-    root->left = NULL;
-    root->right = NULL;
-    return root;
+  node_t *newNode;
+
+  if ((newNode = (node_t*)malloc(sizeof(node_t)))==0){
+    printf("error: malloc\n");
+    exit(1);
   }
 
-  node_t *x;
+  newNode->data = dstData;
+  newNode->left = newNode->right = NULL;
 
-  if (dstData < root->data)
-    x = root->left;
-  else 
-    x = (dstData > root->data) ? root->right: root;
+  return newNode;
+}
 
-  return add(x, dstData);
+void push(node_t **tree, int dstData)
+{
+  node_t *newNode, *rootNode;
+  
+  newNode = createNode(dstData);
+  rootNode = *tree;
 
+  if(!rootNode){
+    *tree = newNode;
+  }else if(dstData < rootNode->data){
+    if(!rootNode->left)
+      rootNode->left = newNode;
+    else 
+      push(&rootNode->left, dstData);
+  }else if(dstData > rootNode->data){
+    if(!rootNode->right)
+      rootNode->right = newNode;
+    else 
+      push(&rootNode->right, dstData);
+  }
+
+
+}
+
+void peek(node_t *rootNode)
+{
+  if (rootNode != NULL){
+    peek(rootNode->left);
+    printf("%d\t", rootNode->data);
+    peek(rootNode->right);
+  }
 }
