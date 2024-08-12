@@ -20,8 +20,8 @@ ht: $(HT)/hash_table.cpp
 	${CP} ${CCFLAGS} $(HT)/hash_table.cpp -o $(HT)/_hash_table
 	$(HT)/_hash_table
 
-# pal_str: ${ARRAYS}/pal_str.c
-# 	${CC} ${CCFLAGS} ${ARRAYS}/pal_str.c -o $(ARRAYS)/_pal_str
+pal_str: ${ARRAYS}/pal_str.c
+	${CC} ${CCFLAGS} ${ARRAYS}/pal_str.c -o $(ARRAYS)/_pal_str
 
 matr: ${ARRAYS}/matr.c
 	${CC} ${CCFLAGS} ${ARRAYS}/matr.c -o $(ARRAYS)/_matr
