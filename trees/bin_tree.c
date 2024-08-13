@@ -19,6 +19,7 @@ node_t* getGreaterChild(node_t *rootNode);
 // операции для работы с деревом
 void push(node_t **tree, int dstData);
 node_t* freeNode(node_t **tree, int dstData);
+node_t* findClosest(node_t *rootNode, int x);
 
 // получение информации о дереве
 void peek(node_t *rootNode);
@@ -33,6 +34,7 @@ node_t* smallLeftRotate(node_t *rootNode);
 void rightSmallRotationTest(node_t **tree);
 void rightBigRotationTest(node_t **tree);
 void removeNodeTest(node_t **tree);
+void findClosestTest(node_t** tree);
 
 int main(int argc, char const *argv[])
 {
@@ -46,6 +48,10 @@ int main(int argc, char const *argv[])
 
   tree = 0L;
   removeNodeTest(&tree);
+  getTreeInfo(tree);
+
+  tree = 0L;
+  findClosestTest(&tree);
   getTreeInfo(tree);
 
   return 0;
@@ -245,6 +251,38 @@ node_t* getGreaterChild(node_t *rootNode)
   return rootNode;
 }
 
+node_t* findClosest(node_t *rootNode, int x)
+{
+  if (!rootNode)
+    return NULL;
+  
+  node_t *xNodeOrClosest;
+
+  if(x < rootNode->data)
+    xNodeOrClosest = findClosest(rootNode->left, x);
+  else if(x > rootNode->data)
+    xNodeOrClosest = findClosest(rootNode->right, x);
+  else{
+    return rootNode;
+  }
+
+  if(!xNodeOrClosest)
+    return rootNode;
+  if(xNodeOrClosest->data == x)
+    return rootNode;
+  else{
+    int parentData, closestData;
+
+    parentData = rootNode->data;
+    closestData = xNodeOrClosest->data;
+
+    if(abs(parentData - x) < abs(closestData - x))
+      return rootNode;
+    else
+      return xNodeOrClosest;
+  }
+}
+
 void rightBigRotationTest(node_t **tree)
 {
   push(tree, 13);
@@ -308,4 +346,33 @@ void removeNodeTest(node_t **tree)
     printf("Remove Node Test is OK\n");
   else
     printf("Remove Node Test is FAILED\n");
+}
+
+void findClosestTest(node_t** tree)
+{
+  push(tree, 4);
+  push(tree, 2);
+  push(tree, 7);
+  push(tree, 1);
+  push(tree, 3);
+  push(tree, 6);
+  push(tree, 8);
+
+  node_t* result;
+  int x, target;
+  x = 0;
+  target = 1;
+
+  result = findClosest(*tree, x);
+  if(!result){
+    printf("Find closest Test is FAILED\n");
+    return;
+  }
+
+  printf("target: %d, finded: %d \n", target, result->data);
+  if(result->data != target){
+    printf("Find closest Test is FAILED\n");
+  }else{
+    printf("Find closest Test is OK\n");
+  }
 }
