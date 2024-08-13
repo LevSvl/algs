@@ -12,6 +12,8 @@ typedef struct Node{
 #define MAX(x, y) ((x > y) ? x: y)
 node_t* createNode(int dstData);
 int getHeight(node_t* rootNode);
+int isBalanced(node_t *rootNode);
+void balance(node_t **tree);
 
 // операции для работы с деревом
 void push(node_t **tree, int dstData);
@@ -24,26 +26,20 @@ void getTreeInfo(node_t *rootNode);
 
 // операции вращения для балансировки
 node_t* smallRightRotate(node_t *rootNode);
-void smallLeftRotate(node_t *rootNode);
-void bigRightRotate(node_t *rootNode);
-void bigLeftRotate(node_t *rootNode);
+node_t* smallLeftRotate(node_t *rootNode);
+
+// тесты
+void rightSmallRotationTest(node_t **tree);
+void rightBigRotationTest(node_t **tree);
 
 int main(int argc, char const *argv[])
 {
   node_t* tree = 0L;
+  rightBigRotationTest(&tree);
+  getTreeInfo(tree);
 
-  push(&tree, 10);
-  push(&tree, 12);
-  push(&tree, -2);
-  push(&tree, 1);
-  push(&tree, -3);
-
-  push(&tree, -50);
-  push(&tree, -500);
-  
-  peek(tree);
-  printf("\n");
-
+  tree = 0L;
+  rightSmallRotationTest(&tree);
   getTreeInfo(tree);
 
   return 0;
@@ -84,19 +80,8 @@ void push(node_t **tree, int dstData)
       push(&rootNode->right, dstData);
   }
 
-  rootNode = *tree;
-  int lh, llh, rh, ch;
-
-  if (rootNode->left){
-    rh = getHeight(rootNode->right); // правое поддерево
-    lh = getHeight(rootNode->left); // левое поддерево
-    llh = getHeight(rootNode->left->left); // левое поддерево lh
-    ch = getHeight(rootNode->left->right); // правое поддерево lh
-  
-    if (abs(lh - rh) == 2)
-      if(ch <= llh)
-        *tree = smallRightRotate(rootNode);
-  }
+  if(!isBalanced(*tree))
+    balance(tree);
 }
 
 void peek(node_t *rootNode)
@@ -141,10 +126,50 @@ int countNodes(node_t *rootNode)
 
 void getTreeInfo(node_t *rootNode)
 {
+  peek(rootNode);
   printf("\n");
   printf("is balanced: %d\n", isBalanced(rootNode));
   printf("nodes nums: %d\n", countNodes(rootNode));
   printf("root node data: %d\n", rootNode->data);
+}
+
+void balance(node_t **tree)
+{
+  node_t *rootNode;
+
+  rootNode = *tree;
+  int lh, rh, ch;
+
+  if (rootNode->left){
+    int llh;
+
+    rh = getHeight(rootNode->right); // правое поддерево
+    lh = getHeight(rootNode->left); // левое поддерево
+    llh = getHeight(rootNode->left->left); // левое поддерево lh
+    ch = getHeight(rootNode->left->right); // правое поддерево lh
+  
+    if (lh - rh == 2 && (ch <= llh))
+      *tree = smallRightRotate(*tree);
+    else if (lh - rh == 1 && ch - rh == 2){
+      *tree = smallLeftRotate(*tree);
+      *tree = smallRightRotate(*tree);
+    }
+  }
+  if (rootNode->right){
+    int rrh;
+
+    rh = getHeight(rootNode->right); // правое поддерево
+    lh = getHeight(rootNode->left); // левое поддерево
+    rrh = getHeight(rootNode->right->right); // правое поддерево rh
+    ch = getHeight(rootNode->right->left); // левое поддерево rh
+  
+    if (rh - lh == 2 && (ch <= rrh))
+      *tree = smallLeftRotate(*tree);
+    else if (rh - lh == 1 && ch - lh == 2){
+      *tree = smallRightRotate(*tree);
+      *tree = smallLeftRotate(*tree);
+    }
+  }
 }
 
 node_t* smallRightRotate(node_t *rootNode){
@@ -158,4 +183,76 @@ node_t* smallRightRotate(node_t *rootNode){
   b->right = a;
 
   return b;
+}
+
+node_t* smallLeftRotate(node_t *rootNode){
+  node_t *a, *b, *c;
+
+  a = rootNode;
+  b = a->right;
+  c = b->left;
+
+  a->right = c;
+  b->left = a;
+
+  return b;  
+}
+
+void rightSmallRotationTest(node_t **tree)
+{
+  push(tree, 10);
+  push(tree, 12);
+  push(tree, -2);
+  push(tree, 1);
+  push(tree, -3);
+  push(tree, -50);
+  push(tree, -500);
+
+  if(isBalanced(*tree))
+    printf("Right small rotation Test is OK\n");
+  else
+    printf("Right small rotation Test is FAILED\n");
+}
+
+void rightBigRotationTest(node_t **tree)
+{
+  push(tree, 13);
+  push(tree, 15);
+  push(tree, 10);
+  push(tree, 11);
+  push(tree, 16);
+  push(tree, 5);
+  push(tree, 4);
+  push(tree, 6);
+  push(tree, 18);
+
+  if(isBalanced(*tree))
+    printf("Right big rotation Test is OK\n");
+  else
+    printf("Right big rotation Test is FAILED\n");
+}
+
+void freeNode(node_t **tree, int dstData)
+{
+  node_t *rootNode;
+  rootNode = *tree;
+
+  if(!rootNode)
+    return;
+  
+  if(dstData < rootNode->data)
+    freeNode(&rootNode->left, dstData);
+  else if(dstData > rootNode->data)
+    freeNode(&rootNode->right, dstData);
+  else{
+    if(!rootNode->left){
+      if(!rootNode->right){
+        free(rootNode);
+      }
+      else{
+        // перенести дочерний правый узел, удалить лишний узел
+
+      } 
+    }
+  }
 }
