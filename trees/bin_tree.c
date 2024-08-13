@@ -11,13 +11,14 @@ typedef struct Node{
 // вспомогательные операции
 #define MAX(x, y) ((x > y) ? x: y)
 node_t* createNode(int dstData);
-int getHeight(node_t* rootNode);
+int getHeight(node_t *rootNode);
 int isBalanced(node_t *rootNode);
 void balance(node_t **tree);
+node_t* getGreaterChild(node_t *rootNode);
 
 // операции для работы с деревом
 void push(node_t **tree, int dstData);
-void freeNode(node_t **tree, int dstData);
+node_t* freeNode(node_t **tree, int dstData);
 
 // получение информации о дереве
 void peek(node_t *rootNode);
@@ -31,6 +32,7 @@ node_t* smallLeftRotate(node_t *rootNode);
 // тесты
 void rightSmallRotationTest(node_t **tree);
 void rightBigRotationTest(node_t **tree);
+void removeNodeTest(node_t **tree);
 
 int main(int argc, char const *argv[])
 {
@@ -40,6 +42,10 @@ int main(int argc, char const *argv[])
 
   tree = 0L;
   rightSmallRotationTest(&tree);
+  getTreeInfo(tree);
+
+  tree = 0L;
+  removeNodeTest(&tree);
   getTreeInfo(tree);
 
   return 0;
@@ -79,9 +85,7 @@ void push(node_t **tree, int dstData)
     else 
       push(&rootNode->right, dstData);
   }
-
-  if(!isBalanced(*tree))
-    balance(tree);
+  balance(tree);
 }
 
 void peek(node_t *rootNode)
@@ -198,20 +202,47 @@ node_t* smallLeftRotate(node_t *rootNode){
   return b;  
 }
 
-void rightSmallRotationTest(node_t **tree)
+node_t* freeNode(node_t **tree, int dstData)
 {
-  push(tree, 10);
-  push(tree, 12);
-  push(tree, -2);
-  push(tree, 1);
-  push(tree, -3);
-  push(tree, -50);
-  push(tree, -500);
+  node_t *rootNode;
 
-  if(isBalanced(*tree))
-    printf("Right small rotation Test is OK\n");
-  else
-    printf("Right small rotation Test is FAILED\n");
+  rootNode = *tree;
+
+  if(!rootNode)
+    return rootNode;
+  if(dstData < rootNode->data){
+    rootNode->left = freeNode(&rootNode->left, dstData);
+  }
+  else if(dstData > rootNode->data){
+    rootNode->right = freeNode(&rootNode->right, dstData);
+  }
+  else{
+    if (!rootNode->left) {
+      node_t* tmp = rootNode->right;
+      free(rootNode);
+      return tmp;
+    }
+
+    if (!rootNode->right) {
+      node_t* tmp = rootNode->left;
+      free(rootNode);
+      return tmp;
+    }
+
+    node_t* nodeWithGreaterData = getGreaterChild(rootNode);
+    rootNode->data = nodeWithGreaterData->data;
+    rootNode->right = freeNode(&rootNode->right, nodeWithGreaterData->data);
+  }
+  balance(&rootNode);
+  return rootNode;
+}
+
+node_t* getGreaterChild(node_t *rootNode) 
+{
+  rootNode = rootNode->right;
+  while (rootNode != NULL && rootNode->left != NULL)
+    rootNode = rootNode->left;
+  return rootNode;
 }
 
 void rightBigRotationTest(node_t **tree)
@@ -232,27 +263,49 @@ void rightBigRotationTest(node_t **tree)
     printf("Right big rotation Test is FAILED\n");
 }
 
-void freeNode(node_t **tree, int dstData)
+void rightSmallRotationTest(node_t **tree)
 {
-  node_t *rootNode;
-  rootNode = *tree;
+  push(tree, 10);
+  push(tree, 12);
+  push(tree, -2);
+  push(tree, 1);
+  push(tree, -3);
+  push(tree, -50);
+  push(tree, -500);
 
-  if(!rootNode)
-    return;
+  if(isBalanced(*tree))
+    printf("Right small rotation Test is OK\n");
+  else
+    printf("Right small rotation Test is FAILED\n");
+}
+
+void removeNodeTest(node_t **tree)
+{
+  int oldSize, newSize;
+  node_t *oldRoot, *newRoot;
+
+  push(tree, 10);
+  push(tree, 12);
+  push(tree, -2);
+  push(tree, 1);
+  push(tree, -3);
+  push(tree, -50);
+  push(tree, -500);
   
-  if(dstData < rootNode->data)
-    freeNode(&rootNode->left, dstData);
-  else if(dstData > rootNode->data)
-    freeNode(&rootNode->right, dstData);
-  else{
-    if(!rootNode->left){
-      if(!rootNode->right){
-        free(rootNode);
-      }
-      else{
-        // перенести дочерний правый узел, удалить лишний узел
+  oldSize = countNodes(*tree);
+  *tree = freeNode(tree, -50);
+  newSize = countNodes(*tree);
 
-      } 
-    }
-  }
+  oldRoot = *tree;
+  *tree = freeNode(tree, -23232);
+  *tree = freeNode(tree, -22);
+  *tree = freeNode(tree, 22);
+  newRoot = *tree;
+
+  *tree = freeNode(tree, -2);
+
+  if(oldRoot != newRoot || (oldSize - newSize != 1) || isBalanced(*tree))
+    printf("Remove Node Test is OK\n");
+  else
+    printf("Remove Node Test is FAILED\n");
 }
