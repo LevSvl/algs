@@ -15,11 +15,13 @@ int getHeight(node_t *rootNode);
 int isBalanced(node_t *rootNode);
 void balance(node_t **tree);
 node_t* getGreaterChild(node_t *rootNode);
+void destroy(node_t *rootNode);
 
 // операции для работы с деревом
 void push(node_t **tree, int dstData);
 node_t* freeNode(node_t **tree, int dstData);
 node_t* findClosest(node_t *rootNode, int x);
+void destroyTree(node_t **tree);
 
 // получение информации о дереве
 void peek(node_t *rootNode);
@@ -41,18 +43,22 @@ int main(int argc, char const *argv[])
   node_t* tree = 0L;
   rightBigRotationTest(&tree);
   getTreeInfo(tree);
+  destroyTree(&tree);
 
   tree = 0L;
   rightSmallRotationTest(&tree);
   getTreeInfo(tree);
+  destroyTree(&tree);
 
   tree = 0L;
   removeNodeTest(&tree);
   getTreeInfo(tree);
+  destroyTree(&tree);
 
   tree = 0L;
   findClosestTest(&tree);
   getTreeInfo(tree);
+  destroyTree(&tree);
 
   return 0;
 }
@@ -241,6 +247,30 @@ node_t* freeNode(node_t **tree, int dstData)
   }
   balance(&rootNode);
   return rootNode;
+}
+
+void destroyTree(node_t **tree)
+{
+  node_t *rootNode;
+  rootNode = *tree;
+  
+  if(rootNode){
+    destroy(rootNode);
+    free(rootNode);
+  }
+}
+
+void destroy(node_t *rootNode)
+{
+  if(rootNode->left){
+    destroy(rootNode->left);
+    free(rootNode->left);
+  }
+
+  if(rootNode->right){
+    destroy(rootNode->right);
+    free(rootNode->right);
+  }
 }
 
 node_t* getGreaterChild(node_t *rootNode) 
