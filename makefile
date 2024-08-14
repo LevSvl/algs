@@ -23,6 +23,9 @@ ht: $(HT)/hash_table.cpp
 pal_str: ${ARRAYS}/pal_str.c
 	${CC} ${CCFLAGS} ${ARRAYS}/pal_str.c -o $(ARRAYS)/_pal_str
 
+unique_str: ${ARRAYS}/unique_str.c
+	${CC} ${CCFLAGS} ${ARRAYS}/unique_str.c -o $(ARRAYS)/_unique_str
+
 matr: ${ARRAYS}/matr.c
 	${CC} ${CCFLAGS} ${ARRAYS}/matr.c -o $(ARRAYS)/_matr
 
