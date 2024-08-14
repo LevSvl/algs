@@ -13,7 +13,8 @@ typedef struct List{
   node_t *tail;
 } list_t;
 
-void init(list_t **list);
+void init(list_t **listptr);
+void destroy(list_t **listptr);
 void push(list_t *list, int data);
 void removeDubplicates(list_t *list);
 void printList(list_t *list);
@@ -44,6 +45,8 @@ int main(int argc, char const *argv[])
   
   printList(list);
 
+  destroy(&list);
+
   return 0;
 }
 
@@ -51,7 +54,22 @@ void init(list_t **listptr)
 {
   *listptr = (list_t*)malloc(sizeof(list_t));
   (*listptr)->head = (*listptr)->tail = NULL;
+}
 
+void destroy(list_t **listptr)
+{
+  node_t *p;
+  p = (*listptr)->head;
+  
+  while(p){
+    node_t* tmp = p->next;
+    (*listptr)->head = tmp;
+
+    free(p);
+
+    p = tmp;
+  }
+  free(*listptr);
 }
 
 void printList(list_t *list)

@@ -14,6 +14,7 @@ typedef struct List{
 } list_t;
 
 void init(list_t **list);
+void destroy(list_t **list);
 void push(list_t *list, int data);
 void outputCommonELem(list_t *list1, list_t *list2);
 void printList(list_t *list);
@@ -58,8 +59,11 @@ int main(int argc, char const *argv[])
   printList(list2);
 
   outputCommonELem(list1, list2);
-  
 
+
+  destroy(&list1);
+  destroy(&list2);
+  
   return 0;
 }
 
@@ -67,7 +71,22 @@ void init(list_t **listptr)
 {
   *listptr = (list_t*)malloc(sizeof(list_t));
   (*listptr)->head = (*listptr)->tail = NULL;
+}
 
+void destroy(list_t **listptr)
+{
+  node_t *p;
+  p = (*listptr)->head;
+  
+  while(p){
+    node_t* tmp = p->next;
+    (*listptr)->head = tmp;
+
+    free(p);
+
+    p = tmp;
+  }
+  free(*listptr);
 }
 
 void printList(list_t *list)
@@ -104,9 +123,9 @@ void outputCommonELem(list_t *list1, list_t *list2)
   node_t *p1, *p2;
 
   p1 = list1->head;
-  p2 = list2->head;
 
   while (p1){
+    p2 = list2->head;
     while(p2){
       if(p1->data == p2->data)
         printf("%d is common elem\n", p1->data);
