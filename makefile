@@ -14,7 +14,7 @@ ST = stack
 SORT = sort
 SEARCH = search
 TREES = trees
-
+DYN = dynamic
 
 ht: $(HT)/hash_table.cpp
 	${CP} ${CCFLAGS} $(HT)/hash_table.cpp -o $(HT)/_hash_table
@@ -50,3 +50,7 @@ bin_search: ${SEARCH}/bin_search.c
 bin_tree: ${TREES}/bin_tree.c
 	${CC} ${CCFLAGS} ${TREES}/bin_tree.c -o ${TREES}/_bin_tree
 	${TREES}/_bin_tree
+
+steps: ${DYN}/steps.c
+	${CC} ${CCFLAGS} ${DYN}/steps.c -o ${DYN}/_steps
+	${DYN}/_steps 2
