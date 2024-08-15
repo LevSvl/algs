@@ -1,5 +1,7 @@
 #include "stdio.h"
 
+// O(n)
+
 #define SYMBOLS_LEN 128
 int chars[SYMBOLS_LEN];
 

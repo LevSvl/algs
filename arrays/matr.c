@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-// O(n)
+// O(n^2)
 
 #define N 5
 #define M 4

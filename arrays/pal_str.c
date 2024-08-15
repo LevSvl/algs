@@ -1,7 +1,7 @@
 #include "stdio.h"
 #include "string.h"
 
-// O(n) - в худшем случае
+// O(n)
 
 int main(int argc, char const *argv[])
 {
