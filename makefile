@@ -54,3 +54,7 @@ bin_tree: ${TREES}/bin_tree.c
 steps: ${DYN}/steps.c
 	${CC} ${CCFLAGS} ${DYN}/steps.c -o ${DYN}/_steps
 	${DYN}/_steps 2
+
+max_subset: ${DYN}/max_subset.c
+	${CC} ${CCFLAGS} ${DYN}/max_subset.c -o ${DYN}/_max_subset
+	${DYN}/_max_subset
