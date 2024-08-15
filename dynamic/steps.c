@@ -1,4 +1,5 @@
 #include "stdio.h"
+#include "stdlib.h"
 
 int steps(int n);
 int steps_rec(int n);
@@ -12,8 +13,8 @@ int main(int argc, char const *argv[])
 
   int n = atoi(argv[1]);
 
-  printf("n = %d, steps = %lld\n", n, steps(n));
-  printf("n = %d, steps = %lld\n", n, steps_rec(n));
+  printf("n = %d, steps = %d\n", n, steps(n));
+  printf("n = %d, steps = %d\n", n, steps_rec(n));
   
   return 0;
 }
