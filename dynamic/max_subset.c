@@ -2,9 +2,6 @@
 #include "stdlib.h"
 #include "stdint.h"
 
-// максимальное число в подмножестве - индекс в массиве nums
-#define MAX_SUBSET_INT INT16_MAX
-
 void peek(int *arr, int sz);
 int maxSubsetSum(int *arr, int sz);
 
@@ -41,25 +38,24 @@ void peek(int *arr, int sz)
   printf("\n");
 }
 
-void __initNums(int* nums)
-{
-  for(int i = 0; i < MAX_SUBSET_INT; i++)
-    nums[i] = 0;
-}
-
 int maxSubsetSum(int *arr, int sz)
 {
-  int sum, nums[MAX_SUBSET_INT];
-
-  __initNums(nums);
+  int min, max;
+  int sum;
+  
   sum = 0;
+  min = max = arr[0];
 
   for(int i = 0; i < sz; i++){
-    if(arr[i] > INT16_MAX)
-      continue;
+    min = (arr[i] < min) ? arr[i] : min; 
+    max = (arr[i] > max) ? arr[i] : max; 
+  }
 
-    if(arr[i] > 0 && !(nums[arr[i]]++))
-      sum += arr[i];
+  if(min <= 0)
+    min = 1;
+
+  while(max >= min){
+    sum += max--;
   }
 
   return sum;
