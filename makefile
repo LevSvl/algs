@@ -55,14 +55,8 @@ _steps: ${DYN}/steps.c
 	${CC} ${CCFLAGS} $< -o $(<D)/$@
 
 _max_subset: ${DYN}/max_subset.c
-	${CC} ${CCFLAGS} ${DYN}/max_subset.c -o ${DYN}/_max_subset
+	${CC} ${CCFLAGS} $< -o $(<D)/$@
 
 clean:
-	rm -f ${ARRAYS}/_*
-	rm -f ${HT}/_*
-	rm -f ${LL}/_*
-	rm -f ${ST}/_*
-	rm -f ${SORT}/_*
-	rm -f ${SEARCH}/_*
-	rm -f ${TREES}/_*
-	rm -f ${DYN}/_*
+	rm -f ${ARRAYS}/_* ${HT}/_* ${LL}/_* ${ST}/_* ${SORT}/_* ${SORT}/_* \
+	${SEARCH}/_* ${TREES}/_* ${DYN}/_*
